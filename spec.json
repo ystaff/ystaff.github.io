@@ -1,0 +1,2009 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Laravel",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http:\/\/localhost\/api\/v1"
+        }
+    ],
+    "paths": {
+        "\/companies\/search": {
+            "post": {
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Получить все Компании",
+                "description": "Возвращается список Компаний, соответствующих фильтру",
+                "operationId": "GetCompanies",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Компании, где s может содержаться в названии, инн или адресе (регионе, городу, адресе) Компании)",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "filter": {
+                                        "$ref": "#\/components\/schemas\/GetCompaniesFilter"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Company"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies": {
+            "post": {
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Создать компанию",
+                "description": "Создается компания с переданными свойствами",
+                "operationId": "CreateCompany",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "description": "Тип Компании",
+                                        "enum": [
+                                            "limited",
+                                            "jointstock",
+                                            "individual"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Название Компании",
+                                        "type": "string"
+                                    },
+                                    "inn": {
+                                        "description": "ИНН Компании",
+                                        "type": "string"
+                                    },
+                                    "ogrn": {
+                                        "description": "ОГРН Компании",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/update": {
+            "patch": {
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Обновить данные Компании",
+                "description": "Данные переданной компании заменяются на новые",
+                "operationId": "UpdateCompany",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "description": "Тип Компании",
+                                        "enum": [
+                                            "limited",
+                                            "jointstock",
+                                            "individual"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Название Компании",
+                                        "type": "string"
+                                    },
+                                    "inn": {
+                                        "description": "ИНН Компании",
+                                        "type": "string"
+                                    },
+                                    "ogrn": {
+                                        "description": "ОГРН Компании",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Компании",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Компании",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}": {
+            "get": {
+                "tags": [
+                    "companies"
+                ],
+                "summary": "Получить детальные данные Компании",
+                "description": "Возвращаются детальные данные не архивной Компании",
+                "operationId": "GetCompanyDetails",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "company": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "type": {
+                                                    "enum": [
+                                                        "limited",
+                                                        "jointstock",
+                                                        "individual"
+                                                    ],
+                                                    "type": "string"
+                                                },
+                                                "inn": {
+                                                    "type": "string"
+                                                },
+                                                "ogrn": {
+                                                    "type": "string"
+                                                },
+                                                "address": {
+                                                    "$ref": "#\/components\/schemas\/Address"
+                                                },
+                                                "objects": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#\/components\/schemas\/Object"
+                                                    }
+                                                },
+                                                "objects_count": {
+                                                    "type": "integer"
+                                                },
+                                                "units": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#\/components\/schemas\/Unit"
+                                                    }
+                                                },
+                                                "units_count": {
+                                                    "type": "integer"
+                                                },
+                                                "contact": {
+                                                    "$ref": "#\/components\/schemas\/Contact"
+                                                },
+                                                "created_at": {
+                                                    "format": "date",
+                                                    "type": "string"
+                                                },
+                                                "updated_at": {
+                                                    "format": "date",
+                                                    "type": "string"
+                                                },
+                                                "deleted_at": {
+                                                    "format": "date",
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/units\/search": {
+            "post": {
+                "tags": [
+                    "units"
+                ],
+                "summary": "Получить список Подразделений Компании",
+                "description": "Возвращается список неархивных Подразделений переданной Компании",
+                "operationId": "GetUnits",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Подразделения, где s может содержаться в названии или адресе (регионе, городу, адресе) Подразделения)",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Unit"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/units": {
+            "post": {
+                "tags": [
+                    "units"
+                ],
+                "summary": "Создать Подразделение",
+                "description": "В переданной Компании создается Подразделение с переданными данными. Нельзя заменить данные в Подразделении, привязанной к другой Компании, нежели переданная",
+                "operationId": "CreateUnit",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "description": "Название Подразделения",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/units\/{unit}\/update": {
+            "patch": {
+                "tags": [
+                    "units"
+                ],
+                "summary": "Обновить Подразделение",
+                "description": "Данные переданного Подразделения заменяются на новые. Нельзя заменить данные в Подразделении, привязанной к другой Компании, нежели переданная",
+                "operationId": "UpdateUnit",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "unit",
+                        "in": "path",
+                        "description": "Подразделение",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "description": "Название Подразделения",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Подразделения",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Подразделения",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/units\/{unit}\/delete": {
+            "delete": {
+                "tags": [
+                    "units"
+                ],
+                "summary": "Удалить подразделение",
+                "description": "Удалить Подразделение, вместе с его Объектами. Нельзя удалить Подразделение, привязанное к другой Компании, нежели переданная",
+                "operationId": "DeleteUnit",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "unit",
+                        "in": "path",
+                        "description": "Подразделение",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/companies\/{company}\/units\/{unit}": {
+            "get": {
+                "tags": [
+                    "units"
+                ],
+                "summary": "Получить детальные данные Подразделения",
+                "description": "Возвращаются детальные данные не архивного Подразделения. Нельзя получить данные Подразделения, привязанного к другой Компании, нежели переданная",
+                "operationId": "GetUnitDetails",
+                "parameters": [
+                    {
+                        "name": "company",
+                        "in": "path",
+                        "description": "Компания",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "unit",
+                        "in": "path",
+                        "description": "Подразделение",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "unit": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "address": {
+                                                    "$ref": "#\/components\/schemas\/Address"
+                                                },
+                                                "objects": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#\/components\/schemas\/Object"
+                                                    }
+                                                },
+                                                "objects_count": {
+                                                    "type": "integer"
+                                                },
+                                                "contact": {
+                                                    "$ref": "#\/components\/schemas\/Contact"
+                                                },
+                                                "created_at": {
+                                                    "format": "date",
+                                                    "type": "string"
+                                                },
+                                                "updated_at": {
+                                                    "format": "date",
+                                                    "type": "string"
+                                                },
+                                                "deleted_at": {
+                                                    "format": "date",
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/search": {
+            "post": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Получить список Объектов",
+                "description": "Возращается список Объектов, соответствующих фильтру",
+                "operationId": "GetObjects",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Объекты, где s может содержаться в названии или адресе (регионе, городу, адресе) Объекта)",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "by": {
+                                        "description": "Тип показываемых объектов (company- Объекты привязанные к Компаниям, unit- Объекты привязанные к Подразделениям)",
+                                        "enum": [
+                                            "company",
+                                            "unit"
+                                        ],
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "filter": {
+                                        "$ref": "#\/components\/schemas\/GetObjectsFilter"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Object"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects": {
+            "post": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Создать Объект",
+                "description": "Создается Объект, привязанный к Компании\/Подразделению",
+                "operationId": "CreateObject",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "description": "Тип объекта (company- Объект привязанный к Компании, unit- Объект привязанный к Подразделению)",
+                                        "enum": [
+                                            "company",
+                                            "unit"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "type_id": {
+                                        "description": "ID Компании\/Подразделения Объекта",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Название Объекта",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/{object}\/update": {
+            "patch": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Обновить данные Объекта",
+                "description": "Данные переданного Объекта заменяются на новые. Если у Объекта есть привязанные Вакансии, то его нельзя привязать к другой Компании\/Подразделению",
+                "operationId": "UpdateObject",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "in": "path",
+                        "description": "Объект",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "type": {
+                                        "description": "Тип объекта (company- Объект привязанный к Компании, unit- Объект привязанный к Подразделению)",
+                                        "enum": [
+                                            "company",
+                                            "unit"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "type_id": {
+                                        "description": "ID Компании\/Подразделения Объекта",
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "description": "Название Объекта",
+                                        "type": "string"
+                                    },
+                                    "region": {
+                                        "description": "Регион расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес расположения Объекта",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Телефон Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "EMail Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "website": {
+                                        "description": "Адрес сайта Объекта",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/{object}\/delete": {
+            "delete": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Удалить Объект",
+                "description": "Удалить Объект. Если Объект уже удален, то будет возращена ошибка валидации",
+                "operationId": "DeleteObject",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "in": "path",
+                        "description": "Объект",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/{object}\/professions\/search": {
+            "post": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Получить список связей Объект-Профессия",
+                "description": "Возращается список связей Объект-Профессия",
+                "operationId": "GetObjectProfessions",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "in": "path",
+                        "description": "Объект",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Профессию, где s может содержаться в названии",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/ObjectProfessionSchema"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/{object}\/professions": {
+            "post": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Создать связь Объект-Профессия",
+                "description": "Создается связь Объект-Профессия между не архивными Объектом и Профессией",
+                "operationId": "CreateObjectProfession",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "in": "path",
+                        "description": "Объект",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "profession_id": {
+                                        "description": "Профессия",
+                                        "type": "integer"
+                                    },
+                                    "salary_type": {
+                                        "description": "Тип ЗП",
+                                        "enum": [
+                                            "hour",
+                                            "full"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "salary": {
+                                        "description": "Размер ЗП",
+                                        "type": "number"
+                                    },
+                                    "description": {
+                                        "description": "Дополнительно",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/objects\/{object}\/professions\/{profession}\/update": {
+            "patch": {
+                "tags": [
+                    "objects"
+                ],
+                "summary": "Обновить данные связь Объект-Профессия",
+                "description": "Данные переданной связи Объект-Профессия заменяются на новые",
+                "operationId": "UpdateObjectProfession",
+                "parameters": [
+                    {
+                        "name": "object",
+                        "in": "path",
+                        "description": "Объект",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "profession",
+                        "in": "path",
+                        "description": "Профессия",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "salary_type": {
+                                        "description": "Тип ЗП",
+                                        "enum": [
+                                            "hour",
+                                            "full"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "salary": {
+                                        "description": "Размер ЗП",
+                                        "type": "number"
+                                    },
+                                    "description": {
+                                        "description": "Дополнительно",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/managers\/search": {
+            "post": {
+                "tags": [
+                    "managers"
+                ],
+                "summary": "Получить список Контактных лиц",
+                "description": "Возращается список Контактных лиц, соответствующих фильтру",
+                "operationId": "GetManagers",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Контактные лица, где s может содержаться в ФИО, номере телефона, email, должности Контактного лица)",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "filter": {
+                                        "$ref": "#\/components\/schemas\/GetManagersFilter"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Manager"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/managers": {
+            "post": {
+                "tags": [
+                    "managers"
+                ],
+                "summary": "Создать Контактное лицо",
+                "description": "Создается Контактное лицо, привязанное к Компании\/Подразделению\/Объекту",
+                "operationId": "CreateManager",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "surname": {
+                                        "description": "Фамилия Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Имя Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "patronymic": {
+                                        "description": "Отчество Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Номер телефона Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "E-Mail Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "position": {
+                                        "description": "Должность (Комментарий) к Контактному лицу",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "whatsapp": {
+                                        "description": "Whatsapp Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "telegram": {
+                                        "description": "Telegram Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "managerable_id": {
+                                        "description": "ID привязываемой к Контактному лицу сущности",
+                                        "type": "string"
+                                    },
+                                    "managerable_type": {
+                                        "description": "Тип привязываемой к Контактному лицу сущности",
+                                        "enum": [
+                                            "company",
+                                            "unit",
+                                            "object"
+                                        ],
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/managers\/{manager}\/update": {
+            "patch": {
+                "tags": [
+                    "managers"
+                ],
+                "summary": "Обновить данные Контактного лица",
+                "description": "Данные переданного Контактного лица заменяются на новые",
+                "operationId": "UpdateManager",
+                "parameters": [
+                    {
+                        "name": "manager",
+                        "in": "path",
+                        "description": "Контактное лицо",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "surname": {
+                                        "description": "Фамилия Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Имя Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "patronymic": {
+                                        "description": "Отчество Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Номер телефона Контактного лица",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "E-Mail Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "position": {
+                                        "description": "Должность (Комментарий) к Контактному лицу",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "whatsapp": {
+                                        "description": "Whatsapp Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "telegram": {
+                                        "description": "Telegram Контактного лица",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/managers\/{manager}\/delete": {
+            "delete": {
+                "tags": [
+                    "managers"
+                ],
+                "summary": "Удалить Контактное лицо",
+                "description": "Удалить Контактное лицо. Если Контактное лицо уже удалено, то будет возращена ошибка валидации",
+                "operationId": "DeleteManager",
+                "parameters": [
+                    {
+                        "name": "manager",
+                        "in": "path",
+                        "description": "Контактное лицо",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/professions\/search": {
+            "post": {
+                "tags": [
+                    "professions"
+                ],
+                "summary": "Получить список Профессий",
+                "description": "Возращается список Профессий",
+                "operationId": "GetProfessions",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Профессию, где s может содержаться в названии",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "filter": {
+                                        "$ref": "#\/components\/schemas\/GetProfessionsFilterSchema"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Profession"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/professions": {
+            "post": {
+                "tags": [
+                    "professions"
+                ],
+                "summary": "Создать Профессию",
+                "description": "Создается Профессию с флагом system=false",
+                "operationId": "CreateProfession",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "description": "Название профессии",
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/professions\/{profession}\/update": {
+            "patch": {
+                "tags": [
+                    "professions"
+                ],
+                "summary": "Обновить данные Профессии",
+                "description": "Данные переданного Профессии заменяются на новые. Если у Профессии установлен флаг system=true, то возвращается ошибка",
+                "operationId": "UpdateProfession",
+                "parameters": [
+                    {
+                        "name": "profession",
+                        "in": "path",
+                        "description": "Профессия",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "description": "Название профессии",
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/professions\/{profession}\/delete": {
+            "delete": {
+                "tags": [
+                    "professions"
+                ],
+                "summary": "Удалить Профессию",
+                "description": "Удалить Профессию. Если у Профессии установлен флаг system=true, то возвращается ошибка",
+                "operationId": "DeleteProfession",
+                "parameters": [
+                    {
+                        "name": "profession",
+                        "in": "path",
+                        "description": "Профессия",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Manager": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "patronymic": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "position": {
+                        "type": "string"
+                    },
+                    "whatsapp": {
+                        "type": "string"
+                    },
+                    "telegram": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "GetProfessionsFilterSchema": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Профессий; deleted- получение только архивных Профессий; all- получение всех Профессий",
+                        "enum": [
+                            "all",
+                            "deleted",
+                            "active"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Company": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "enum": [
+                            "limited",
+                            "jointstock",
+                            "individual"
+                        ],
+                        "type": "string"
+                    },
+                    "inn": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Object": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "region": {
+                                "type": "string"
+                            },
+                            "city": {
+                                "type": "string"
+                            },
+                            "address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "objectable": {
+                        "type": "object"
+                    },
+                    "contact": {
+                        "type": "object",
+                        "properties": {
+                            "phone": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "email": {
+                                "type": "string",
+                                "nullable": true
+                            },
+                            "website": {
+                                "type": "string",
+                                "nullable": true
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "GetCompaniesFilter": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "Тип Компании, если указано несколько, выводятся Компании указанных типов",
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "limited",
+                                "jointstock",
+                                "individual"
+                            ],
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "status": {
+                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
+                        "enum": [
+                            "all",
+                            "deleted",
+                            "active"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Pagination": {
+                "type": "object",
+                "properties": {
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "to": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "GetObjectsFilter": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
+                        "enum": [
+                            "all",
+                            "deleted",
+                            "active"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Contact": {
+                "type": "object",
+                "properties": {
+                    "phone": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "website": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Unit": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "region": {
+                                "type": "string"
+                            },
+                            "city": {
+                                "type": "string"
+                            },
+                            "address": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "GetManagersFilter": {
+                "type": "object",
+                "properties": {
+                    "managerable_type": {
+                        "description": "Тип фильтрации",
+                        "enum": [
+                            "company",
+                            "unit",
+                            "object"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "managerable_id": {
+                        "description": "ID Компании\/Подразделения\/Объекта, по которому происходит фильтрация. Подается только если подано поле Тип фильтрации",
+                        "type": "integer",
+                        "nullable": true
+                    }
+                }
+            },
+            "ObjectProfessionSchema": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "salary_type": {
+                        "enum": [
+                            "hour",
+                            "full"
+                        ],
+                        "type": "string"
+                    },
+                    "salary": {
+                        "type": "number",
+                        "maximum": 1000000000000,
+                        "minimum": 0
+                    },
+                    "description": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "profession": {
+                        "$ref": "#\/components\/schemas\/Profession"
+                    },
+                    "object": {
+                        "$ref": "#\/components\/schemas\/Object"
+                    }
+                }
+            },
+            "Profession": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "system": {
+                        "type": "boolean"
+                    }
+                }
+            }
+        },
+        "responses": {
+            "ErrorValidation": {
+                "description": "Validation errors",
+                "content": {
+                    "application\/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "example": "The given data was invalid."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "field": [
+                                            "Something is wrong with this field!"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "companies",
+            "description": "Компании"
+        },
+        {
+            "name": "units",
+            "description": "Подразделения"
+        },
+        {
+            "name": "objects",
+            "description": "Объекты"
+        },
+        {
+            "name": "managers",
+            "description": "Контактные лица"
+        },
+        {
+            "name": "professions",
+            "description": "Профессии"
+        }
+    ]
+}
