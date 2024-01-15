@@ -1585,10 +1585,326 @@
                     }
                 }
             }
+        },
+        "\/employees\/search": {
+            "post": {
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Получить всех Исполнителей",
+                "description": "Возвращается список Исполнителей",
+                "operationId": "GetEmployees",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "page": {
+                                        "description": "Порядковый номер страницы",
+                                        "default": 1,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "count": {
+                                        "description": "Количество выводимых на странице записей",
+                                        "default": 10,
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "nullable": true
+                                    },
+                                    "s": {
+                                        "description": "Поисковая строка (если передается, то необходимо найти Компании, где s может содержаться в ФИО, номере телефона (основном или дополнительном), email, адресе)",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Employee"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#\/components\/schemas\/Pagination"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/employees": {
+            "post": {
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Создать Исполнителя",
+                "description": "Создается Исполнитель с переданными свойствами",
+                "operationId": "CreateEmployee",
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "surname": {
+                                        "description": "Фамилия исполнителя",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Имя исполнителя",
+                                        "type": "string"
+                                    },
+                                    "patronymic": {
+                                        "description": "Отчество исполнителя",
+                                        "type": "string"
+                                    },
+                                    "gender": {
+                                        "description": "Пол исполнителя",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "birthday": {
+                                        "description": "День рождения исполнителя",
+                                        "format": "yyyy-mm-dd",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Основной номер телефона исполнителя",
+                                        "type": "string"
+                                    },
+                                    "phone_additional": {
+                                        "description": "Дополнительный номер телефона исполнителя",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "Адрес электронной почты исполнителя",
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "mail@mail.mail"
+                                    },
+                                    "comment": {
+                                        "description": "Комментарий к исполнителю",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "attraction_id": {
+                                        "description": "ID источника привлечения исполнителя",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "region": {
+                                        "description": "Регион, в котором проживает исполнитель",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город, в котором проживает исполнитель",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес проживания исполнителя",
+                                        "type": "string"
+                                    },
+                                    "citizenship_id": {
+                                        "description": "Обязательный массив, хотя бы с одним id из таблицы citizenships",
+                                        "type": "array"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    }
+                }
+            }
+        },
+        "\/employees\/{employee}\/update": {
+            "patch": {
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Обновить данные Исполнителя",
+                "description": "Данные переданного Исполнителя заменяются на новые",
+                "operationId": "UpdateEmployee",
+                "parameters": [
+                    {
+                        "name": "employee",
+                        "in": "path",
+                        "description": "Сотрудник",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "surname": {
+                                        "description": "Фамилия исполнителя",
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "description": "Имя исполнителя",
+                                        "type": "string"
+                                    },
+                                    "patronymic": {
+                                        "description": "Отчество исполнителя",
+                                        "type": "string"
+                                    },
+                                    "gender": {
+                                        "description": "Пол исполнителя",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "type": "string"
+                                    },
+                                    "birthday": {
+                                        "description": "День рождения исполнителя",
+                                        "format": "yyyy-mm-dd",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Основной номер телефона исполнителя",
+                                        "type": "string"
+                                    },
+                                    "phone_additional": {
+                                        "description": "Дополнительный номер телефона исполнителя",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "email": {
+                                        "description": "Адрес электронной почты исполнителя",
+                                        "type": "string",
+                                        "nullable": true,
+                                        "example": "mail@mail.mail"
+                                    },
+                                    "comment": {
+                                        "description": "Комментарий к исполнителю",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "attraction_id": {
+                                        "description": "ID источника привлечения исполнителя",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "region": {
+                                        "description": "Регион, в котором проживает исполнитель",
+                                        "type": "string"
+                                    },
+                                    "city": {
+                                        "description": "Город, в котором проживает исполнитель",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Адрес проживания исполнителя",
+                                        "type": "string"
+                                    },
+                                    "citizenship_id": {
+                                        "description": "Обязательный массив, хотя бы с одним id из таблицы citizenships",
+                                        "type": "array"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful response"
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/employees\/{employee}": {
+            "get": {
+                "tags": [
+                    "employees"
+                ],
+                "summary": "Получить детальные данные Исполнителя",
+                "description": "Возвращаются детальные данные Исполнителя",
+                "operationId": "GetEmployeeDetails",
+                "parameters": [
+                    {
+                        "name": "employee",
+                        "in": "path",
+                        "description": "Сотрудник",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "employee": {
+                                            "$ref": "#\/components\/schemas\/EmployeeDetail"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
         }
     },
     "components": {
         "schemas": {
+            "Attraction": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
             "Manager": {
                 "type": "object",
                 "properties": {
@@ -1687,6 +2003,20 @@
                     }
                 }
             },
+            "Citizenship": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
+                    }
+                }
+            },
             "Object": {
                 "type": "object",
                 "properties": {
@@ -1745,6 +2075,61 @@
                         "format": "date",
                         "type": "string",
                         "nullable": true
+                    }
+                }
+            },
+            "Employee": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "patronymic": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "enum": [
+                            "male",
+                            "female"
+                        ],
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "phone_additional": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "attraction": {
+                        "$ref": "#\/components\/schemas\/Attraction"
+                    },
+                    "citizenships": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Citizenship"
+                        }
+                    },
+                    "created_at": {
+                        "format": "yyyy-mm-dd",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "yyyy-mm-dd",
+                        "type": "string"
                     }
                 }
             },
@@ -1845,6 +2230,68 @@
                     "website": {
                         "type": "string",
                         "nullable": true
+                    }
+                }
+            },
+            "EmployeeDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "patronymic": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "enum": [
+                            "male",
+                            "female"
+                        ],
+                        "type": "string"
+                    },
+                    "birthday": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "phone_additional": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "comment": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "attraction": {
+                        "$ref": "#\/components\/schemas\/Attraction"
+                    },
+                    "citizenships": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Citizenship"
+                        }
+                    },
+                    "created_at": {
+                        "format": "yyyy-mm-dd",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "yyyy-mm-dd",
+                        "type": "string"
                     }
                 }
             },
@@ -2004,6 +2451,10 @@
         {
             "name": "professions",
             "description": "Профессии"
+        },
+        {
+            "name": "employees",
+            "description": "Исполнители"
         }
     ]
 }
