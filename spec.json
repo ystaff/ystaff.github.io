@@ -2872,21 +2872,7 @@
                         "type": "string"
                     },
                     "address": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "integer"
-                            },
-                            "region": {
-                                "type": "string"
-                            },
-                            "city": {
-                                "type": "string"
-                            },
-                            "address": {
-                                "type": "string"
-                            }
-                        }
+                        "$ref": "#\/components\/schemas\/Address"
                     },
                     "created_at": {
                         "format": "date",
