@@ -2387,7 +2387,7 @@
                                         "regions": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#\/components\/schemas\/Address"
+                                                "$ref": "#\/components\/schemas\/RegionList"
                                             }
                                         }
                                     }
@@ -2443,7 +2443,7 @@
                                         "cities": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#\/components\/schemas\/Address"
+                                                "$ref": "#\/components\/schemas\/CityList"
                                             }
                                         }
                                     }
@@ -2460,124 +2460,39 @@
     },
     "components": {
         "schemas": {
-            "Attraction": {
+            "Contact": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "employees_count": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "Comment": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "text": {
-                        "type": "string"
-                    },
-                    "created_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "updated_at": {
-                        "format": "date",
-                        "type": "string"
-                    }
-                }
-            },
-            "GetUnitsFilterSchema": {
-                "type": "object",
-                "properties": {
-                    "regions": {
-                        "description": "Массив непустых строк регионов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    },
-                    "cities": {
-                        "description": "Массив непустых строк городов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    }
-                }
-            },
-            "ProfessionWithPivotSchema": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "salary_type": {
-                        "enum": [
-                            "hour",
-                            "full"
-                        ],
-                        "type": "string"
-                    },
-                    "salary": {
-                        "type": "number",
-                        "maximum": 1000000000000,
-                        "minimum": 0
-                    }
-                }
-            },
-            "Manager": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "surname": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "patronymic": {
-                        "type": "string"
-                    },
                     "phone": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "email": {
-                        "type": "string"
-                    },
-                    "position": {
-                        "type": "string"
-                    },
-                    "whatsapp": {
-                        "type": "string"
-                    },
-                    "telegram": {
-                        "type": "string"
-                    },
-                    "created_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "updated_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "deleted_at": {
-                        "format": "date",
                         "type": "string",
+                        "nullable": true
+                    },
+                    "website": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "GetManagersFilter": {
+                "type": "object",
+                "properties": {
+                    "managerable_type": {
+                        "description": "Тип фильтрации",
+                        "enum": [
+                            "company",
+                            "unit",
+                            "object"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "managerable_id": {
+                        "description": "ID Компании\/Подразделения\/Объекта, по которому происходит фильтрация. Подается только если подано поле Тип фильтрации",
+                        "type": "integer",
                         "nullable": true
                     }
                 }
@@ -2597,7 +2512,7 @@
                     }
                 }
             },
-            "Company": {
+            "Attraction": {
                 "type": "object",
                 "properties": {
                     "id": {
@@ -2605,15 +2520,17 @@
                     },
                     "name": {
                         "type": "string"
+                    }
+                }
+            },
+            "Comment": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
                     },
-                    "type": {
-                        "$ref": "#\/components\/schemas\/CompanyType"
-                    },
-                    "inn": {
+                    "text": {
                         "type": "string"
-                    },
-                    "address": {
-                        "$ref": "#\/components\/schemas\/Address"
                     },
                     "created_at": {
                         "format": "date",
@@ -2622,287 +2539,6 @@
                     "updated_at": {
                         "format": "date",
                         "type": "string"
-                    },
-                    "deleted_at": {
-                        "format": "date",
-                        "type": "string",
-                        "nullable": true
-                    }
-                }
-            },
-            "Citizenship": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "code": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Object": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "address": {
-                        "$ref": "#\/components\/schemas\/Address"
-                    },
-                    "objectable": {
-                        "type": "object"
-                    },
-                    "contact": {
-                        "$ref": "#\/components\/schemas\/Contact"
-                    },
-                    "professions": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/ProfessionWithPivotSchema"
-                        }
-                    },
-                    "created_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "updated_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "deleted_at": {
-                        "format": "date",
-                        "type": "string",
-                        "nullable": true
-                    }
-                }
-            },
-            "Employee": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "surname": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "patronymic": {
-                        "type": "string"
-                    },
-                    "gender": {
-                        "enum": [
-                            "male",
-                            "female"
-                        ],
-                        "type": "string"
-                    },
-                    "phone": {
-                        "type": "string"
-                    },
-                    "phone_additional": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "email": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "address": {
-                        "$ref": "#\/components\/schemas\/Address"
-                    },
-                    "attraction": {
-                        "$ref": "#\/components\/schemas\/Attraction"
-                    },
-                    "citizenships": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#\/components\/schemas\/Citizenship"
-                        }
-                    },
-                    "created_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "updated_at": {
-                        "format": "date",
-                        "type": "string"
-                    }
-                }
-            },
-            "GetCompaniesFilter": {
-                "type": "object",
-                "properties": {
-                    "type": {
-                        "description": "Тип Компании, если указано несколько, выводятся Компании указанных типов",
-                        "type": "array",
-                        "items": {
-                            "enum": [
-                                "limited",
-                                "jointstock",
-                                "individual"
-                            ],
-                            "type": "string"
-                        },
-                        "nullable": true
-                    },
-                    "status": {
-                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
-                        "enum": [
-                            "all",
-                            "deleted",
-                            "active"
-                        ],
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "regions": {
-                        "description": "Массив непустых строк регионов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    },
-                    "cities": {
-                        "description": "Массив непустых строк городов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    }
-                }
-            },
-            "Address": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "count": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Pagination": {
-                "type": "object",
-                "properties": {
-                    "current_page": {
-                        "type": "integer"
-                    },
-                    "from": {
-                        "type": "integer"
-                    },
-                    "last_page": {
-                        "type": "integer"
-                    },
-                    "per_page": {
-                        "type": "integer"
-                    },
-                    "to": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "CompanyType": {
-                "description": "Тип Компании",
-                "enum": [
-                    "limited",
-                    "jointstock",
-                    "individual"
-                ],
-                "type": "string"
-            },
-            "GetObjectsFilter": {
-                "type": "object",
-                "properties": {
-                    "status": {
-                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
-                        "enum": [
-                            "all",
-                            "deleted",
-                            "active"
-                        ],
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "regions": {
-                        "description": "Массив непустых строк регионов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    },
-                    "cities": {
-                        "description": "Массив непустых строк городов",
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "nullable": true
-                    }
-                }
-            },
-            "Contact": {
-                "type": "object",
-                "properties": {
-                    "phone": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "email": {
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "website": {
-                        "type": "string",
-                        "nullable": true
-                    }
-                }
-            },
-            "ObjectDetail": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "name": {
-                        "type": "string"
-                    },
-                    "address": {
-                        "$ref": "#\/components\/schemas\/Address"
-                    },
-                    "objectable": {
-                        "type": "object"
-                    },
-                    "contact": {
-                        "$ref": "#\/components\/schemas\/Contact"
-                    },
-                    "created_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "updated_at": {
-                        "format": "date",
-                        "type": "string"
-                    },
-                    "deleted_at": {
-                        "format": "date",
-                        "type": "string",
-                        "nullable": true
                     }
                 }
             },
@@ -2955,6 +2591,70 @@
                         "format": "date",
                         "type": "string",
                         "nullable": true
+                    }
+                }
+            },
+            "ObjectDetail": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "objectable": {
+                        "type": "object"
+                    },
+                    "contact": {
+                        "$ref": "#\/components\/schemas\/Contact"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Citizenship": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "code": {
+                        "type": "string"
                     }
                 }
             },
@@ -3020,17 +2720,90 @@
                     }
                 }
             },
-            "Unit": {
+            "Employee": {
                 "type": "object",
                 "properties": {
                     "id": {
                         "type": "integer"
                     },
+                    "surname": {
+                        "type": "string"
+                    },
                     "name": {
                         "type": "string"
                     },
+                    "patronymic": {
+                        "type": "string"
+                    },
+                    "gender": {
+                        "enum": [
+                            "male",
+                            "female"
+                        ],
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "phone_additional": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": true
+                    },
                     "address": {
                         "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "attraction": {
+                        "$ref": "#\/components\/schemas\/Attraction"
+                    },
+                    "citizenships": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/Citizenship"
+                        }
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    }
+                }
+            },
+            "Manager": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "surname": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "patronymic": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "position": {
+                        "type": "string"
+                    },
+                    "whatsapp": {
+                        "type": "string"
+                    },
+                    "telegram": {
+                        "type": "string"
                     },
                     "created_at": {
                         "format": "date",
@@ -3043,26 +2816,6 @@
                     "deleted_at": {
                         "format": "date",
                         "type": "string",
-                        "nullable": true
-                    }
-                }
-            },
-            "GetManagersFilter": {
-                "type": "object",
-                "properties": {
-                    "managerable_type": {
-                        "description": "Тип фильтрации",
-                        "enum": [
-                            "company",
-                            "unit",
-                            "object"
-                        ],
-                        "type": "string",
-                        "nullable": true
-                    },
-                    "managerable_id": {
-                        "description": "ID Компании\/Подразделения\/Объекта, по которому происходит фильтрация. Подается только если подано поле Тип фильтрации",
-                        "type": "integer",
                         "nullable": true
                     }
                 }
@@ -3097,6 +2850,68 @@
                     }
                 }
             },
+            "Object": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "objectable": {
+                        "type": "object"
+                    },
+                    "contact": {
+                        "$ref": "#\/components\/schemas\/Contact"
+                    },
+                    "professions": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#\/components\/schemas\/ProfessionWithPivotSchema"
+                        }
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Pagination": {
+                "type": "object",
+                "properties": {
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "from": {
+                        "type": "integer"
+                    },
+                    "last_page": {
+                        "type": "integer"
+                    },
+                    "per_page": {
+                        "type": "integer"
+                    },
+                    "to": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                }
+            },
             "Profession": {
                 "type": "object",
                 "properties": {
@@ -3107,6 +2922,216 @@
                         "type": "boolean"
                     }
                 }
+            },
+            "ProfessionWithPivotSchema": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "salary_type": {
+                        "enum": [
+                            "hour",
+                            "full"
+                        ],
+                        "type": "string"
+                    },
+                    "salary": {
+                        "type": "number",
+                        "maximum": 1000000000000,
+                        "minimum": 0
+                    }
+                }
+            },
+            "Unit": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "Company": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "$ref": "#\/components\/schemas\/CompanyType"
+                    },
+                    "inn": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "$ref": "#\/components\/schemas\/Address"
+                    },
+                    "created_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "format": "date",
+                        "type": "string"
+                    },
+                    "deleted_at": {
+                        "format": "date",
+                        "type": "string",
+                        "nullable": true
+                    }
+                }
+            },
+            "RegionList": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "string"
+                    }
+                }
+            },
+            "GetCompaniesFilter": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "description": "Тип Компании, если указано несколько, выводятся Компании указанных типов",
+                        "type": "array",
+                        "items": {
+                            "enum": [
+                                "limited",
+                                "jointstock",
+                                "individual"
+                            ],
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "status": {
+                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
+                        "enum": [
+                            "all",
+                            "deleted",
+                            "active"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                }
+            },
+            "GetObjectsFilter": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "description": "Тип фильтрации: active (по-умолчанию)- получение только активных\n                            Компаний; deleted- получение только архивных Компаний; all- получение всех Компаний",
+                        "enum": [
+                            "all",
+                            "deleted",
+                            "active"
+                        ],
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                }
+            },
+            "GetUnitsFilterSchema": {
+                "type": "object",
+                "properties": {
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    }
+                }
+            },
+            "CityList": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CompanyType": {
+                "description": "Тип Компании",
+                "enum": [
+                    "limited",
+                    "jointstock",
+                    "individual"
+                ],
+                "type": "string"
             }
         },
         "responses": {
