@@ -278,12 +278,7 @@
                                                     "type": "string"
                                                 },
                                                 "type": {
-                                                    "enum": [
-                                                        "limited",
-                                                        "jointstock",
-                                                        "individual"
-                                                    ],
-                                                    "type": "string"
+                                                    "$ref": "#\/components\/schemas\/CompanyType"
                                                 },
                                                 "inn": {
                                                     "type": "string"
@@ -384,6 +379,9 @@
                                         "description": "Поисковая строка (если передается, то необходимо найти Подразделения, где s может содержаться в названии или адресе (регионе, городу, адресе) Подразделения)",
                                         "type": "string",
                                         "nullable": true
+                                    },
+                                    "filter": {
+                                        "$ref": "#\/components\/schemas\/GetUnitsFilterSchema"
                                     }
                                 }
                             }
@@ -726,13 +724,18 @@
                                         "type": "string",
                                         "nullable": true
                                     },
-                                    "by": {
+                                    "objectable_type": {
                                         "description": "Тип показываемых объектов (company- Объекты привязанные к Компаниям, unit- Объекты привязанные к Подразделениям)",
                                         "enum": [
                                             "company",
                                             "unit"
                                         ],
                                         "type": "string",
+                                        "nullable": true
+                                    },
+                                    "objectable_id": {
+                                        "description": "ID модели, тип которой передается в objectable_type",
+                                        "type": "integer",
                                         "nullable": true
                                     },
                                     "filter": {
@@ -2349,6 +2352,110 @@
                     }
                 }
             }
+        },
+        "\/addresses\/regions": {
+            "get": {
+                "tags": [
+                    "addresses"
+                ],
+                "summary": "Получить все существующие регионы",
+                "description": "Возвращается список существующих в БД регионов",
+                "operationId": "GetRegions",
+                "parameters": [
+                    {
+                        "name": "addressable_type",
+                        "in": "query",
+                        "description": "Тип элемента, к которому привязан адрес",
+                        "schema": {
+                            "enum": [
+                                "company",
+                                "unit",
+                                "object"
+                            ],
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "regions": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Address"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
+        },
+        "\/addresses\/cities": {
+            "get": {
+                "tags": [
+                    "addresses"
+                ],
+                "summary": "Получить все существующие города",
+                "description": "Возвращается список существующих в БД городов",
+                "operationId": "GetCities",
+                "parameters": [
+                    {
+                        "name": "addressable_type",
+                        "in": "query",
+                        "description": "Тип элемента, к которому привязан адрес",
+                        "schema": {
+                            "enum": [
+                                "company",
+                                "unit",
+                                "object"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "region",
+                        "in": "query",
+                        "description": "Фильтр по региону расположения городов, если задан, то поиск производится по вхождению подстроки",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cities": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#\/components\/schemas\/Address"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#\/components\/responses\/ErrorValidation"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2383,6 +2490,27 @@
                     "updated_at": {
                         "format": "date",
                         "type": "string"
+                    }
+                }
+            },
+            "GetUnitsFilterSchema": {
+                "type": "object",
+                "properties": {
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -2479,12 +2607,7 @@
                         "type": "string"
                     },
                     "type": {
-                        "enum": [
-                            "limited",
-                            "jointstock",
-                            "individual"
-                        ],
-                        "type": "string"
+                        "$ref": "#\/components\/schemas\/CompanyType"
                     },
                     "inn": {
                         "type": "string"
@@ -2640,22 +2763,32 @@
                         ],
                         "type": "string",
                         "nullable": true
+                    },
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
                     }
                 }
             },
             "Address": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "integer"
-                    },
-                    "region": {
+                    "name": {
                         "type": "string"
                     },
-                    "city": {
-                        "type": "string"
-                    },
-                    "address": {
+                    "count": {
                         "type": "string"
                     }
                 }
@@ -2683,6 +2816,15 @@
                     }
                 }
             },
+            "CompanyType": {
+                "description": "Тип Компании",
+                "enum": [
+                    "limited",
+                    "jointstock",
+                    "individual"
+                ],
+                "type": "string"
+            },
             "GetObjectsFilter": {
                 "type": "object",
                 "properties": {
@@ -2694,6 +2836,22 @@
                             "active"
                         ],
                         "type": "string",
+                        "nullable": true
+                    },
+                    "regions": {
+                        "description": "Массив непустых строк регионов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "nullable": true
+                    },
+                    "cities": {
+                        "description": "Массив непустых строк городов",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
                         "nullable": true
                     }
                 }
